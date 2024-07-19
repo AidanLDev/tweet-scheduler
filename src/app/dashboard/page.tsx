@@ -4,6 +4,11 @@ import { useCallback, useEffect, useState } from 'react';
 import App from '@/app/components/App';
 import { availableSchedule } from '../util';
 import { useSearchParams } from 'next/navigation';
+import { CopilotKit } from '@copilotkit/react-core';
+import { CopilotPopup } from '@copilotkit/react-ui';
+
+import '@copilotkit/react-ui/styles.css';
+import '@copilotkit/react-textarea/styles.css';
 
 export default function Dashboard() {
   const searchParams = useSearchParams();
@@ -32,6 +37,21 @@ export default function Dashboard() {
   }, [fetchToken]);
 
   return (
-    <App yourSchedule={yourSchedule} updateYourSchedule={updateYourSchedule} />
+    <CopilotKit runtimeUrl='/api/copilotkit/'>
+      <App
+        yourSchedule={yourSchedule}
+        updateYourSchedule={updateYourSchedule}
+      />
+      <CopilotPopup
+        instructions='Help the user create and manage their personal brand'
+        defaultOpen={true}
+        labels={{
+          title: 'Posts Scheduler Copilot',
+          initial:
+            'Hello there! I can help you manage your schedule. WHat do you want to do? You can generate posts, add, and delete scheduled posts.',
+        }}
+        clickOutsideToClose={false}
+      ></CopilotPopup>
+    </CopilotKit>
   );
 }
